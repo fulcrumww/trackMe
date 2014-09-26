@@ -1,0 +1,24 @@
+
+<ion-view title="Current Location">
+    <ion-header-bar >
+        <ion-nav-buttons >
+            <button class="button icon-left ion-chevron-left button-clear button-light" style="border-radius:18px;color:#fff"  ng-click="goBack();">Back</button>
+        </ion-nav-buttons>
+        <h1 class="title">Current Location</h1>
+        <ion-nav-buttons side="right">
+            <button  class="button button-icon icon ion-ios7-loop" ng-click="refresh();"></button>
+        </ion-nav-buttons>
+                   
+    </ion-header-bar>
+    <ion-content >
+        <ul class="list" >
+            <li class="item item-text-wrap" ng-repeat=" location in currentLocation" >
+                <div>  {{location.currentLocation}} @ {{location.logTime }}</div>
+            </li>
+        </ul>
+        
+    </ion-content>
+</ion-view>
+
+
+
