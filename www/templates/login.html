@@ -1,0 +1,26 @@
+<ion-view title="Login">
+  <ion-header-bar ng-class="myclass">
+        <h1 class="title">Login</h1>
+  </ion-header-bar>
+  <ion-content>
+    <div class="has-header">
+      <div class="list">
+        <label class="item item-input">
+          <span class="input-label">Username</span>
+            <input type="text" ng-model="user.username" placeholder="Username" class="item  item-input" ng-blur="validate=true">
+        </label>
+        <div  style="margin-top:10px;padding-top:0px;padding-bottom:10px" ng-show="!user.username.length && validate">  <span style="padding-left:20%;" ><font style="color:red;">Please enter username</font></span></div>
+
+        <label class="item item-input">
+          <span class="input-label">Password</span>
+            <input type="password"  ng-model="user.password" placeholder="Password" class="item item-input" ng-blur="validate1=true">
+        </label>
+         <div style="margin-top:10px;padding-top:0px;padding-bottom:10px" ng-show="!user.password.length && validate1">  <span style="padding-left:20%;" ><font style="color:red;">Please enter password</font></span></div>
+
+        <label class="item">
+         <button class="button button-block  button-positive" style="border-radius:15px;" ng-click="login()">Login</button>
+        </label>
+      </div>
+    </div>
+  </ion-content>
+</ion-view>

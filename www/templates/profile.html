@@ -1,0 +1,79 @@
+<ion-view title="Profile">
+    <ion-header-bar >
+        
+        <ion-nav-buttons >
+           <button class="button icon-left ion-chevron-left button-clear button-light" style="border-radius:18px;color:#fff"  ng-click="goBack();">Back</button>
+        </ion-nav-buttons>
+        <h1 class="title">Profile</h1>
+        
+    </ion-header-bar>
+    <ion-content>
+        <div class="content">
+        <div class="list">
+            <label class="item item-input item-stacked-label">
+                <span class="input-label"><strong>Name</strong></span>
+                <input type="text" ng-model="user.name" placeholder="Name" class="item item-input">
+                    </label>
+        
+        
+        
+        
+            <label class="item item-input item-stacked-label">
+                <span class="input-label"><strong>Email</strong></span>
+                <input type="email" ng-model="user.email" placeholder="Email" class="item item-input">
+                    </label>
+        
+        
+            <label class="item item-input item-stacked-label">
+                <span class="input-label"><strong>Employee Id</strong></span>
+                <input type="text" ng-model="user.empId" placeholder=" Employee Id" class="item item-input">
+                    </label>
+        
+        
+            <label class="item item-input item-stacked-label">
+                <span class="input-label"><strong>Mobile</strong></span>
+                <input type="tel" ng-model="user.mobile" placeholder=" Mobile" class="item item-input">
+                    </label>
+        
+        
+        
+            <label class="item item-input item-stacked-label">
+                <span class="input-label"><strong>Home Location</strong></span>
+                <input type="text" ng-model="user.homelocation" placeholder=" Home Location" class="item item-input">
+                    </label>
+            <label class="item item-input item-select">
+                <div class="input-label">
+                   <strong> Shift Timing</strong>
+                </div>
+                <select  ng-model="user.shifttiming"  ng-init="user.shifttiming='Morning'"  ng-change="getSelectedShift(user.shifttiming);">
+                    <option  value="Morning" >Morning</option>
+                    <option value="Afternoon" >Afternoon</option>
+                    <option value="Evening" >Evening</option>
+                </select>
+            </label>
+        
+            <label class="item item-input item-select">
+                <div class="input-label">
+                    <strong>Routes</strong>
+                </div>
+                <select ng-model="myRoute"  ng-change="getSelectedRoute(myRoute);"  ng-options="route.name for route in routes"  >
+                    <option value="" >--Select Route--</option>
+                </select>
+            </label>
+        </div>
+        
+        <div class="padding">
+            <button class="button button-block  button-positive" style="border-radius:15px;"  ng-click="submit()">Update Profile</button>
+        </div>
+        
+    </ion-content>
+</ion-view>
+
+
+
+
+
+
+
+
+
