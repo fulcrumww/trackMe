@@ -88,7 +88,7 @@ angular.module('starter.controllers', [])
            dataType: "json",
            contentType: "application/json",
            method: "POST",
-           timeout:50000,
+           timeout:15000,
            data:param
            
            }).success(function (data, status, headers, config) {
@@ -129,7 +129,7 @@ angular.module('starter.controllers', [])
                   dataType: "json",
                   contentType: "application/json",
                   method: "GET",
-                  timeout:50000,
+                  timeout:20000,
                   params: params
                   
                   }).success(function (data, status, headers, config) {
@@ -142,7 +142,7 @@ angular.module('starter.controllers', [])
                            dataType: "json",
                            contentType: "application/json",
                            method: "GET",
-                           timeout:50000,
+                           timeout:20000,
                            params: params
                            
                  }).success(function (data, status, headers, config) {
@@ -206,7 +206,7 @@ angular.module('starter.controllers', [])
               'X-Random-Shit':'123123123'
               },
               method: "PUT",
-              timeout:50000,
+              timeout:20000,
               data : param
         }).success(function (data, status, headers, config) {
                          
@@ -229,20 +229,60 @@ angular.module('starter.controllers', [])
 
 .controller('dashboardCtrl',['$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup' , function($scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,geolocation) {
                              
-                         
+    var timeInterval=null;
     var userId= sessionStorage.userId;
     var sessionId=  sessionStorage.sessionId;
     $rootScope.page="dashboard";
     $scope.stopTracking=function(){
       $rootScope.showAlert('Tracking stopped!!!');
       clearInterval(stop);
+      timeInterval=null;
       stop="undefined";
     }
                         
     $scope.viewRoute=function(){
       $state.go('app.currentlocation');
     }
+                             
+     $scope.sendSMS=function(){
+      var currentAddress =null;
+       $scope.number=[];
+       var emergencyDetails=JSON.parse(window.localStorage.getItem('emergencyContacts'));
+        //alert(localStorage.emergencyContacts);
+    if(emergencyDetails !=null && localStorage.emergencyContacts != "[]"){
+     for(var i=0; i<3 ; i++){
+     try{
+       if((emergencyDetails[i].phones[0].type !="home fax" && emergencyDetails[i].phones[0].type !="work fax" && emergencyDetails[i].phones[0].type !="pager" ) || (emergencyDetails[i].phones[0].type !="HOME FAX" && emergencyDetails[i].phones[0].type !="WORK FAX" && emergencyDetails[i].phones[0].type !="PAGER" ) ){
+          $scope.number.push(emergencyDetails[i].phones[0].value);
+         
+         }
+        }catch(err){
+           i++;
+        }
+     }
+
+       
+      currentAddress =sessionStorage.address;
+      var numberString ="'"+$scope.number.toString()+"'";
+                            
+     if(currentAddress!= "undefined" && currentAddress !=null){
+      window.plugins.socialsharing.shareViaSMS('I am currently @'+currentAddress, numberString, function(msg) {console.log('ok: ' + msg)}, function(msg) {alert('error: ' + msg)});
+                             
+     }else{
+                             
+        window.plugins.socialsharing.shareViaSMS('Testing Application!!!', numberString, function(msg) {console.log('ok: ' + msg)}, function(msg) {alert('error: ' + msg)});
+    }
+    }else{
+     $rootScope.showAlert("Please add 'Emergency contacts' first");
+
+     }
+                            
+}
+    
+                             
+                       
     $scope.startTracking=function(){
+            timeInterval=50000;
        /*  var flag_Tracking_Started=false;
            var param = {"sessionId":sessionId,"userId":userId};
            var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
@@ -270,12 +310,12 @@ angular.module('starter.controllers', [])
          try {
         $ionicLoading.show({template: 'Loading...'});
         if(navigator.geolocation){
-          navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true });
+          navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000 });
         }
         }catch(err) {
           $rootScope.showAlert(err.message);
         }
-        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true });}, 50000);
+        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000});}, timeInterval);
        //     }
        //  },2000);
     }
@@ -300,95 +340,95 @@ angular.module('starter.controllers', [])
     var latlng = new google.maps.LatLng(lat, lng);
     geocoder.geocode({
                                          'latLng': latlng
-                                         }, function (results, status) {
+         }, function (results, status) {
                                          
-                                         if (status == google.maps.GeocoderStatus.OK) {
-                                         // console.log(status);
-                                         
-                                         if (results[1]) {
-                                         //loop through components
-                                         for (var i = 0; i < results[0].address_components.length; i++) {
-                                         //loop through types
-                                         for (var b = 0; b < results[0].address_components[i].types.length; b++) {
-                                         address= (results[1].formatted_address);
-                                         }
-                                         }
-                                         sessionStorage.setItem('address',address);
-                                        // $rootScope.showAlert('Current Address: '+address);
-                                         
-                                         var smallAddress= address.split(",");
-                                         var  redefinedAddress=smallAddress[0]+","+smallAddress[1];
-                                         if(address !=null){
-                                         
-                                         var userId= sessionStorage.userId;
-                                         var sessionId=  sessionStorage.sessionId;
-                                         var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
-                                         
-                                         var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
-                                         $http({
-                                               url: url,
-                                               dataType: "json",
-                                               contentType: "application/json",
-                                               method: "POST",
-                                               timeout:50000,
-                                               data: param
-                                               
-                                               }).success(function (data, status, headers, config) {
-                                                           $ionicLoading.hide();
-                                                          $state.go('app.currentlocation', null, { reload: true });
-                                                          }).error(function (data, status, headers, config) {
-                                                                    $ionicLoading.hide();
-                                                                   $rootScope.showAlert('Error in sending updates to service');
-                                                                   });
-                                         }
-                                         } else {
-                                          $ionicLoading.hide();
-                                         }
-                                         } else {
-                                          $ionicLoading.hide();
-                                          $rootScope.showAlert('Please turn on location services');
-                                         }
-                                         
-                                         });
-                        }
+         if (status == google.maps.GeocoderStatus.OK) {
+         // console.log(status);
+         
+         if (results[1]) {
+         //loop through components
+         for (var i = 0; i < results[0].address_components.length; i++) {
+         //loop through types
+         for (var b = 0; b < results[0].address_components[i].types.length; b++) {
+         address= (results[1].formatted_address);
+         }
+         }
+         sessionStorage.setItem('address',address);
+        // $rootScope.showAlert('Current Address: '+address);
+         
+         var smallAddress= address.split(",");
+         var  redefinedAddress=smallAddress[0]+","+smallAddress[1];
+         if(address !=null){
+         
+         var userId= sessionStorage.userId;
+         var sessionId=  sessionStorage.sessionId;
+         var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
+         
+         var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
+         $http({
+               url: url,
+               dataType: "json",
+               contentType: "application/json",
+               method: "POST",
+               timeout:20000,
+               data: param
+               
+               }).success(function (data, status, headers, config) {
+                           $ionicLoading.hide();
+                          $state.go('app.currentlocation', null, { reload: true });
+                          }).error(function (data, status, headers, config) {
+                                    $ionicLoading.hide();
+                                  // $rootScope.showAlert('Error in sending updates to service');
+                                   });
+         }
+         } else {
+          $ionicLoading.hide();
+         }
+         } else {
+          $ionicLoading.hide();
+          $rootScope.showAlert('Please turn on location services');
+         }
+         
+         });
+}
                         
                         }])
 
 .controller('currenLocationCtrl',['$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup' ,  function($scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup , geolocation) {
-                                  $scope.currentLocation=[];
-                                  $scope.refresh=function(){
-                                  $ionicLoading.show({template: 'Loading...'});
-                                  var userId= sessionStorage.userId;
-                                  var sessionId=  sessionStorage.sessionId;
+                  $scope.currentLocation=[];
+                  $scope.refresh=function(){
+                  $ionicLoading.show({template: 'Loading...'});
+                  var userId= sessionStorage.userId;
+                  var sessionId=  sessionStorage.sessionId;
+           
+                  var param = {"sessionId":sessionId,"userId":userId};
+                  var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
+                  $http({
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json",
+                        method: "GET",
+                        timeout:20000,
+                        params: param
+                        
+                        }).success(function (data, status, headers, config) {
+                           // alert("GET successs: "+JSON.stringify(data));
+                           $ionicLoading.hide();
+
+                           $scope.currentLocation=data.data;
                            
-                                  var param = {"sessionId":sessionId,"userId":userId};
-                                  var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
-                                  $http({
-                                        url: url,
-                                        dataType: "json",
-                                        contentType: "application/json",
-                                        method: "GET",
-                                        timeout:50000,
-                                        params: param
-                                        
-                                        }).success(function (data, status, headers, config) {
-                                                   // alert("GET successs: "+JSON.stringify(data));
-                                                   $ionicLoading.hide();
+                           }).error(function (data, status, headers, config) {
+                            $ionicLoading.hide();
 
-                                                   $scope.currentLocation=data.data;
-                                                   
-                                                   }).error(function (data, status, headers, config) {
-                                                            $ionicLoading.hide();
-
-                                                            $rootScope.showAlert('Unable to reach server. Please try again');
-                                                            });
-                                  }
-                                  $scope.refresh();
-                                  $scope.goBack=function(){
-                                   $state.go('app.dashboard');
-                                  }
+                            $rootScope.showAlert('Unable to reach server. Please try again');
+                            });
+                  }
+                  $scope.refresh();
+                  $scope.goBack=function(){
+                   $state.go('app.dashboard');
+                  }
                                   
-                                  }])
+        }])
 
 .controller('EmergDetailsCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup) {
             console.log('In emergency details');
@@ -409,21 +449,21 @@ angular.module('starter.controllers', [])
             
             
             
-            $scope.pickContact = function() { alert('in here');
+            $scope.pickContact = function() { 
             
             ContactsService.pickContact().then(
-               function(contact) { alert('in 2');
+               function(contact) { 
                
                if($scope.data.selectedContacts.length < 3) {
                var found = JSON.stringify($filter('filter')($scope.data.selectedContacts, contact));
                if (found.length > 2) {
-               alert('Contact Already Exists');
+               $rootScope.showAlert('Contact already exists');
                } else {
                $scope.data.selectedContacts.push(contact);
                
                }
                }else{
-               alert('Only three emergency contacts allowed');
+               $rootScope.showAlert('Only three emergency contacts allowed');
                }
                console.log("Selected contacts=");
                console.log($scope.data.selectedContacts);
@@ -438,19 +478,19 @@ angular.module('starter.controllers', [])
             $scope.updateEmgrDetails = function(){
             //alert(JSON.stringify($scope.data));
             window.localStorage.setItem('emergencyContacts', JSON.stringify($scope.data.selectedContacts));
-            
+            $rootScope.showAlert("Emergency contacts added successfully");
+            $state.go('app.dashboard');
+
             };
             
             $scope.removeContact = function(contact){ //alert(JSON.stringify(contact));
             //var index = $scope.bdays.indexOf(contact);alert(index);
-            var confirmPopup = $ionicPopup.confirm({
-                                                   title: 'Emergency Contact',
-                                                   template: 'Are you sure you want to delete contact?'
-                                                   });
+            var confirmPopup = $ionicPopup.confirm({title: 'Emergency Contact',template: 'Are you sure you want to remove contact?'});
             confirmPopup.then(function(res) {
                               if(res) {
                               console.log('Contact deleted');
-                              $scope.data.selectedContacts.splice(contact,1);
+                              var index = $scope.data.selectedContacts.indexOf(contact);
+                              $scope.data.selectedContacts.splice(index,1);
                               window.localStorage.setItem('emergencyContacts', JSON.stringify($scope.data.selectedContacts));
                               } else {
                               console.log('cancelled');
