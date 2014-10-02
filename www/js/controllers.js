@@ -242,6 +242,25 @@ angular.module('starter.controllers', [])
     $scope.viewRoute=function(){
       $state.go('app.currentlocation');
     }
+                             
+     $scope.sendSMS=function(){
+        var currentAddress =null;
+         var number=[];
+         var emergencyDetails=  window.localStorage.emergencyContacts;
+         for(var i=0; i<3 ; i++){
+             number = emergencyDetails.phones[0].value;
+         }
+
+        currentAddress =sessionStorage.address;
+         if(currentAddress!= "undefined" && currentAddress !=null){
+            sms.send(number, currentAddress , intent, success, error);
+         }else{
+             sms.send(number, "Testing App!!!" , intent, success, error);
+         }
+        
+     }
+     var success = function () { alert('Message sent successfully'); };
+     var error = function (e) { alert('Message Failed:' + e); };
     $scope.startTracking=function(){
        /*  var flag_Tracking_Started=false;
            var param = {"sessionId":sessionId,"userId":userId};
@@ -438,7 +457,7 @@ angular.module('starter.controllers', [])
             $scope.updateEmgrDetails = function(){
             //alert(JSON.stringify($scope.data));
             window.localStorage.setItem('emergencyContacts', JSON.stringify($scope.data.selectedContacts));
-            
+
             };
             
             $scope.removeContact = function(contact){ //alert(JSON.stringify(contact));
