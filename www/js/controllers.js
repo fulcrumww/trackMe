@@ -283,31 +283,7 @@ angular.module('starter.controllers', [])
                        
     $scope.startTracking=function(){
             timeInterval=50000;
-       /*  var flag_Tracking_Started=false;
-           var param = {"sessionId":sessionId,"userId":userId};
-           var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
-           $http({
-               url: url,
-               dataType: "json",
-               contentType: "application/json",
-               method: "GET",
-               timeout:50000,
-               params: param
-               
-           }).success(function (data, status, headers, config) {
-              //alert("GET successs: "+JSON.stringify(data));
-              $ionicLoading.hide();
-              flag_Tracking_Started=true;
-              $rootScope.showAlert('Tracking started already');
-              $state.go('app.currentlocation', null, { reload: true });
-            }).error(function (data, status, headers, config) {
-              flag_Tracking_Started=false;
-                                   
-            });
-        setTimeout(function(){
-        if (flag_Tracking_Started == false ) {
-         */
-         try {
+               try {
         $ionicLoading.show({template: 'Loading...'});
         if(navigator.geolocation){
           navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000 });
@@ -316,8 +292,7 @@ angular.module('starter.controllers', [])
           $rootScope.showAlert(err.message);
         }
         stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000});}, timeInterval);
-       //     }
-       //  },2000);
+       
     }
                   
          
@@ -333,67 +308,66 @@ angular.module('starter.controllers', [])
     geocoder = new google.maps.Geocoder();
     }
     
-    function codeLatLng(lat, lng) {
-    var geocoder;
-    var address = "";
-    geocoder = new google.maps.Geocoder();
-    var latlng = new google.maps.LatLng(lat, lng);
-    geocoder.geocode({
-                                         'latLng': latlng
-         }, function (results, status) {
-                                         
-         if (status == google.maps.GeocoderStatus.OK) {
-         // console.log(status);
-         
-         if (results[1]) {
-         //loop through components
-         for (var i = 0; i < results[0].address_components.length; i++) {
-         //loop through types
-         for (var b = 0; b < results[0].address_components[i].types.length; b++) {
-         address= (results[1].formatted_address);
-         }
-         }
-         sessionStorage.setItem('address',address);
-        // $rootScope.showAlert('Current Address: '+address);
-         
-         var smallAddress= address.split(",");
-         var  redefinedAddress=smallAddress[0]+","+smallAddress[1];
-         if(address !=null){
-         
-         var userId= sessionStorage.userId;
-         var sessionId=  sessionStorage.sessionId;
-         var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
-         
-         var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
-         $http({
-               url: url,
-               dataType: "json",
-               contentType: "application/json",
-               method: "POST",
-               timeout:20000,
-               data: param
-               
-               }).success(function (data, status, headers, config) {
+     function codeLatLng(lat, lng) {
+         var geocoder;
+         var address = "";
+         geocoder = new google.maps.Geocoder();
+         var latlng = new google.maps.LatLng(lat, lng);
+         geocoder.geocode({
+                      'latLng': latlng
+                      }, function (results, status) {
+                      
+          if (status == google.maps.GeocoderStatus.OK) {
+          // console.log(status);
+          
+          if (results[1]) {
+          //loop through components
+          for (var i = 0; i < results[0].address_components.length; i++) {
+          //loop through types
+          for (var b = 0; b < results[0].address_components[i].types.length; b++) {
+          address= (results[1].formatted_address);
+          }
+          }
+          sessionStorage.setItem('address',address);
+          // $rootScope.showAlert('Current Address: '+address);
+          
+          var smallAddress= address.split(",");
+          var  redefinedAddress=smallAddress[0]+","+smallAddress[1];
+          if(address !=null){
+          
+          var userId= sessionStorage.userId;
+          var sessionId=  sessionStorage.sessionId;
+          var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
+          
+          var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
+              $http({
+                    url: url,
+                    dataType: "json",
+                    contentType: "application/json",
+                    method: "POST",
+                    timeout:50000,
+                    data: param
+                    
+                    }).success(function (data, status, headers, config) {
                            $ionicLoading.hide();
-                          $state.go('app.currentlocation', null, { reload: true });
-                          }).error(function (data, status, headers, config) {
-                                    $ionicLoading.hide();
-                                  // $rootScope.showAlert('Error in sending updates to service');
-                                   });
-         }
-         } else {
-          $ionicLoading.hide();
-         }
-         } else {
-          $ionicLoading.hide();
-          $rootScope.showAlert('Please turn on location services');
+                           $state.go('app.currentlocation', null, { reload: true });
+                    }).error(function (data, status, headers, config) {
+                        $ionicLoading.hide();
+                        $rootScope.showAlert('Error in sending updates to service');
+                    });
+              }
+              } else {
+              $ionicLoading.hide();
+              }
+              } else {
+              $ionicLoading.hide();
+              $rootScope.showAlert('Please turn on location services');
+              }
+              
+              });
          }
          
-         });
-}
-                        
-                        }])
-
+         }])
 .controller('currenLocationCtrl',['$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup' ,  function($scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup , geolocation) {
                   $scope.currentLocation=[];
                   $scope.refresh=function(){
