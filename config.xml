@@ -48,4 +48,11 @@
     <feature name="StatusBar">
       <param name="ios-package" value="CDVStatusBar" onload="true" />
     </feature>
+
+    <cdv:plugin name="org.apache.cordova.geolocation" version="0.3.10" />
+    <cdv:plugin name="de.appplant.cordova.plugin.background-mode" version="0.5.0" />
+    <cdv:plugin name="nl.x-services.plugins.socialsharing" version="4.3.8" />
+    <cdv:plugin name="org.apache.cordova.contacts" version="0.2.13" />
+    <cdv:plugin name="org.apache.cordova.splashscreen" version="0.3.3" />
+    
 </widget>
