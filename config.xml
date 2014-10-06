@@ -13,11 +13,11 @@
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
 
-    <gap:plugin name="org.apache.cordova.geolocation" version="0.3.10" />
-    <gap:plugin name="de.appplant.cordova.plugin.background-mode" version="0.5.0" />
-    <gap:plugin name="nl.x-services.plugins.socialsharing" version="4.3.8" />
-    <gap:plugin name="org.apache.cordova.contacts" version="0.2.13" />
-    <gap:plugin name="org.apache.cordova.splashscreen" version="0.3.3" />
+    <gap:plugin name="org.apache.cordova.geolocation" />
+    <gap:plugin name="de.appplant.cordova.plugin.background-mode"  />
+    <gap:plugin name="nl.x-services.plugins.socialsharing"  />
+    <gap:plugin name="org.apache.cordova.contacts"  />
+    <gap:plugin name="org.apache.cordova.splashscreen"  />
     
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
