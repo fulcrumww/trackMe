@@ -61,8 +61,8 @@ angular.module('starter.controllers', [])
      $scope.login=function(){
      $ionicLoading.show({template: 'Loading...'});
      var url="http://123.63.36.182:8084/roster_app/api/v1/user/login";
-      var param={"json":{"username" : "FWIN01112", "password" : "fulcrum#1"}};
-     //var param={"json":{"username" : $scope.user.username, "password" : $scope.user.password}};
+     // var param={"json":{"username" : "FWIN01112", "password" : "fulcrum#1"}};
+     var param={"json":{"username" : $scope.user.username, "password" : $scope.user.password}};
      if($scope.user.username!=null && $scope.user.password !=null){
              
    /*  connectServer.getResponse(url,"POST",param).success(function (data) {
