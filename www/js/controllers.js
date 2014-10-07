@@ -233,7 +233,6 @@ angular.module('starter.controllers', [])
     var userId= sessionStorage.userId;
     var sessionId=  sessionStorage.sessionId;
     $rootScope.page="dashboard";
-        alert(timeInterval);
     $scope.stopTracking=function(){
 
         if( timeInterval != null){
