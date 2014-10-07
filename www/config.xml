@@ -18,6 +18,7 @@
     <gap:plugin name="nl.x-services.plugins.socialsharing"  />
     <gap:plugin name="org.apache.cordova.contacts"  />
     <gap:plugin name="org.apache.cordova.splashscreen"  />
+    <gap:splash src="screen.png" />
 
     <gap:splash src="android_res/drawable-port-ldpi/screen.png" gap:platform="android" gap:qualifier="ldpi" />
     <gap:splash src="android_res/drawable-port-mdpi/screen.png" gap:platform="android" gap:qualifier="mdpi" />
