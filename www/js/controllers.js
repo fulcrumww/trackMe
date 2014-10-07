@@ -53,6 +53,7 @@ angular.module('starter.controllers', [])
 
 .controller('loginCtrl',['$scope','$state','$http','$rootScope','$ionicLoading', '$ionicPopup', function($scope,$state,  $http, $rootScope,$ionicLoading, $ionicPopup ) {
      $scope.user = {username: null,password: null};
+     timeInterval=null;
      $rootScope.showAlert = function(msg) {
      var alertPopup = $ionicPopup.alert({title: 'MESSAGE',template: msg});
      alertPopup.then(function(res) {});
@@ -228,16 +229,23 @@ angular.module('starter.controllers', [])
 
 
 .controller('dashboardCtrl',['$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup' , function($scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,geolocation) {
-                             
-    var timeInterval=null;
+
     var userId= sessionStorage.userId;
     var sessionId=  sessionStorage.sessionId;
     $rootScope.page="dashboard";
+        alert(timeInterval);
     $scope.stopTracking=function(){
-      $rootScope.showAlert('Tracking stopped!!!');
-      clearInterval(stop);
-      timeInterval=null;
-      stop="undefined";
+
+        if( timeInterval != null){
+            $rootScope.showAlert('Tracking stopped successfully');
+            timeInterval=null;
+        }else{
+            $rootScope.showAlert('Tracking is already stopped');
+            timeInterval=null;
+        }
+
+        clearInterval(stop);
+        stop="undefined";
     }
                         
     $scope.viewRoute=function(){
@@ -377,6 +385,7 @@ angular.module('starter.controllers', [])
            
                   var param = {"sessionId":sessionId,"userId":userId};
                   var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
+                  //alert(JSON.stringify(param)+ " url: "+url);
                   $http({
                         url: url,
                         dataType: "json",
@@ -386,16 +395,12 @@ angular.module('starter.controllers', [])
                         params: param
                         
                         }).success(function (data, status, headers, config) {
-                           // alert("GET successs: "+JSON.stringify(data));
                            $ionicLoading.hide();
-
                            $scope.currentLocation=data.data;
-                           
-                           }).error(function (data, status, headers, config) {
+                        }).error(function (data, status, headers, config) {
                             $ionicLoading.hide();
-
-                            $rootScope.showAlert('Unable to reach server. Please try again');
-                            });
+                            $rootScope.showAlert(JSON.stringify(data.message));
+                        });
                   }
                   $scope.refresh();
                   $scope.goBack=function(){
