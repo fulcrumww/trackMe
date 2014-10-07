@@ -13,7 +13,7 @@
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
 
-    <gap:plugin name="org.apache.cordova.geolocation" />
+    <gap:plugin name="org.apache.cordova.geolocation"  />
     <gap:plugin name="de.appplant.cordova.plugin.background-mode"  />
     <gap:plugin name="nl.x-services.plugins.socialsharing"  />
     <gap:plugin name="org.apache.cordova.contacts"  />
