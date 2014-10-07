@@ -239,7 +239,7 @@ angular.module('starter.controllers', [])
             $rootScope.showAlert('Tracking stopped successfully');
             timeInterval=null;
         }else{
-            $rootScope.showAlert('Tracking is already stopped');
+            $rootScope.showAlert('Tracking is not started');
             timeInterval=null;
         }
 
