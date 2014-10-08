@@ -256,7 +256,9 @@ angular.module('starter.controllers', [])
                      }else{
                          window.plugins.socialsharing.shareViaSMS('Location not traceable!!!', numberString, function(msg) {console.log('ok: ' + msg)}, function(msg) {alert('error: ' + msg)});
                      }
+                     $ionicLoading.hide();
                  },function(error){
+                     $ionicLoading.hide();
                      currentAddress = error;
                  }
              );
@@ -268,6 +270,7 @@ angular.module('starter.controllers', [])
                             
 }
     function getUserLastLocation (){
+        $ionicLoading.show({template: 'processing...'});
         var geocoder;
         var address = "";
         var deferred = $q.defer();
