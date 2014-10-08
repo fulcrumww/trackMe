@@ -1,4 +1,7 @@
 angular.module('starter.controllers', [])
+.constant("$config", {
+    "serviceUrl": "http://123.63.36.182:8084/roster_app/api/v1"
+})
 .service("ContactsService", ['$q', function($q) {
                              
          var formatContact = function(contact) {
@@ -80,7 +83,7 @@ angular.module('starter.controllers', [])
             }
     })
 
-.controller('loginCtrl',['$scope','$state','$http','$rootScope','$ionicLoading', '$ionicPopup','connectServer', function($scope,$state,  $http, $rootScope,$ionicLoading, $ionicPopup,connectServer ) {
+.controller('loginCtrl',['$config','$scope','$state','$http','$rootScope','$ionicLoading', '$ionicPopup','connectServer', function($config,$scope,$state,  $http, $rootScope,$ionicLoading, $ionicPopup,connectServer ) {
      $scope.user = {username: null,password: null};
      timeInterval=null;
                          
@@ -93,7 +96,7 @@ angular.module('starter.controllers', [])
      // Login using credientials
      $scope.login=function(){
          $ionicLoading.show({template: 'Loading...'});
-         var url="http://123.63.36.182:8084/roster_app/api/v1/user/login";
+         var url= $config.serviceUrl + "/user/login";
          // var param={"json":{"username" : "FWIN01112", "password" : "fulcrum#1"}};
          var param={"json":{"username" : $scope.user.username, "password" : $scope.user.password}};
          if($scope.user.username!=null && $scope.user.password !=null){
@@ -123,7 +126,7 @@ angular.module('starter.controllers', [])
     }
  }])
 
-.controller('profileCtrl', function($scope, $state ,$http, $rootScope, $ionicLoading, $ionicPopup ,connectServer,connectServerToGet) {
+.controller('profileCtrl', function($config,$scope, $state ,$http, $rootScope, $ionicLoading, $ionicPopup ,connectServer,connectServerToGet) {
            $ionicLoading.show({template: 'Loading...'});
             $scope.routes=[];
             $scope.user={userId : null, homelocation : null, shifttiming : null , mobile : null, pickuppoint: null,empId : null , email : null };
@@ -131,12 +134,12 @@ angular.module('starter.controllers', [])
             var userId= sessionStorage.userId;
             var sessionId=  sessionStorage.sessionId;
             var params = {"sessionId":sessionId,"userId":userId};
-            var url="http://123.63.36.182:8084/roster_app/api/v1/routes/list";
+            var url= $config.serviceUrl + "/routes/list";
             connectServerToGet.getResponse(url,"GET",params).success(function (data) {
         
             $scope.routes=data.data;
             //Get And display
-            var url="http://123.63.36.182:8084/roster_app/api/v1/user/profile";
+            var url= $config.serviceUrl + "/user/profile";
             connectServerToGet.getResponse(url,"GET",params).success(function (data) {
 
                   $ionicLoading.hide();
@@ -188,7 +191,7 @@ angular.module('starter.controllers', [])
 
         $scope.submit=function(){
             $ionicLoading.show({template: 'Updating...'});
-            var url="http://123.63.36.182:8084/roster_app/api/v1/user/update?sessionId="+sessionId+"&userId="+userId;
+            var url= $config.serviceUrl + "/user/update?sessionId="+sessionId+"&userId="+userId;
             var param={"json":{"userId" : userId, "homeLocation" : $scope.user.homelocation, "shiftTimmings" :  $scope.user.shifttiming , "mobile" :parseInt($scope.user.mobile) , "pickUpPoint" :$scope.myRoute.id}};
             if($scope.user.homelocation != null && $scope.user.mobile !=null && $scope.myRoute.id !=null){
                 connectServer.getResponse(url,"PUT",param).success(function (data) {
@@ -208,7 +211,7 @@ angular.module('starter.controllers', [])
             }
          }
  })
-.controller('dashboardCtrl',['$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer','$q' , function($scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,$q,geolocation) {
+.controller('dashboardCtrl',['$config','$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer','$q' , function($config,$scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,$q,geolocation) {
 
 
     var userId= sessionStorage.userId;
@@ -369,7 +372,7 @@ angular.module('starter.controllers', [])
                   var sessionId=  sessionStorage.sessionId;
                   var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
 
-                  var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
+                  var url= $config.serviceUrl + "/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
 
                     connectServer.getResponse(url,"POST",param).success(function (data) {
                                $ionicLoading.hide();
@@ -391,7 +394,7 @@ angular.module('starter.controllers', [])
      }
          
 }])
-.controller('currenLocationCtrl',['$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet',  function($scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, geolocation) {
+.controller('currenLocationCtrl',['$config','$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet',  function($config,$scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, geolocation) {
           $scope.currentLocation=[];
 
           $scope.refresh=function(){
@@ -400,7 +403,7 @@ angular.module('starter.controllers', [])
               var sessionId=  sessionStorage.sessionId;
 
               var param = {"sessionId":sessionId,"userId":userId};
-              var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
+              var url= $config.serviceUrl + "/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
               //alert(JSON.stringify(param)+ " url: "+url);
               connectServerToGet.getResponse(url,"GET",param).success(function (data) {
                   $ionicLoading.hide();
