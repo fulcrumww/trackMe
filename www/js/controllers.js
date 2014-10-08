@@ -29,8 +29,39 @@ angular.module('starter.controllers', [])
      pickContact : pickContact
      };
      }])
+     .factory('connectServer',['$http', function($http){
+        var service={};
+        service.getResponse = function (url,methodtype,param) {
+          return  $http({
+            url: url,
+            dataType: "json",
+            contentType: "application/json",
+            method: methodtype,
+            timeout:15000,
+            data: param
+            
+            });
+          };
+        return service;
+  }])
+    .factory('connectServerToGet',['$http', function($http){
+        var service={};
+        service.getResponse = function (url,methodtype,param) {
+            return  $http({
+                url: url,
+                dataType: "json",
+                contentType: "application/json",
+                method: methodtype,
+                timeout:15000,
+                params: param
 
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
+            });
+        };
+        return service;
+    }])
+
+
+    .controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
             $scope.logOut=function(){
             clearInterval(stop);
             stop="undefined";
@@ -51,64 +82,42 @@ angular.module('starter.controllers', [])
             }
     })
 
-.controller('loginCtrl',['$scope','$state','$http','$rootScope','$ionicLoading', '$ionicPopup', function($scope,$state,  $http, $rootScope,$ionicLoading, $ionicPopup ) {
+.controller('loginCtrl',['$scope','$state','$http','$rootScope','$ionicLoading', '$ionicPopup','connectServer', function($scope,$state,  $http, $rootScope,$ionicLoading, $ionicPopup,connectServer ) {
      $scope.user = {username: null,password: null};
      timeInterval=null;
+                         
      $rootScope.showAlert = function(msg) {
      var alertPopup = $ionicPopup.alert({title: 'MESSAGE',template: msg});
      alertPopup.then(function(res) {});
      };
      $rootScope.page="login";
+                         
+     // Login using credientials
      $scope.login=function(){
-     $ionicLoading.show({template: 'Loading...'});
-     var url="http://123.63.36.182:8084/roster_app/api/v1/user/login";
-     // var param={"json":{"username" : "FWIN01112", "password" : "fulcrum#1"}};
-     var param={"json":{"username" : $scope.user.username, "password" : $scope.user.password}};
-     if($scope.user.username!=null && $scope.user.password !=null){
-             
-   /*  connectServer.getResponse(url,"POST",param).success(function (data) {
-      alert(JSON.stringify(data));
-      $ionicLoading.hide();
-      var obj = data.data;
-      sessionStorage.setItem('userId',obj.userId);
-      sessionStorage.setItem('sessionId',obj.sessionId);
-      sessionStorage.setItem('shiftTimmings',obj.shiftTimmings);
-      sessionStorage.setItem('pickUpPoint',obj.pickUpPoint);
-      if(obj.pickUpPoint !=null  && obj.pickUpPoint !=""){
-      $state.go('app.dashboard');
-      }
-      else{
-        $state.go('app.profile');
-      }
-      }).error(function (data) {
-               $rootScope.showAlert('Unable to log in. Please try again');
-               $ionicLoading.hide();
-    });*/
-     $http({
-           url: url,
-           dataType: "json",
-           contentType: "application/json",
-           method: "POST",
-           timeout:15000,
-           data:param
-           
-           }).success(function (data, status, headers, config) {
-              $ionicLoading.hide();
-              var obj = data.data;
-              sessionStorage.setItem('userId',obj.userId);
-              sessionStorage.setItem('sessionId',obj.sessionId);
-              sessionStorage.setItem('shiftTimmings',obj.shiftTimmings);
-              sessionStorage.setItem('pickUpPoint',obj.pickUpPoint);
-              if(obj.pickUpPoint !=null  && obj.pickUpPoint !=""){
-              $state.go('app.dashboard');
-              }
-              else{
-              $state.go('app.profile');
-              }
-              }).error(function (data, status, headers, config) {
-                $rootScope.showAlert('Unable to log in. Please try again');
-                       $ionicLoading.hide();
-                       });
+         $ionicLoading.show({template: 'Loading...'});
+         var url="http://123.63.36.182:8084/roster_app/api/v1/user/login";
+         // var param={"json":{"username" : "FWIN01112", "password" : "fulcrum#1"}};
+         var param={"json":{"username" : $scope.user.username, "password" : $scope.user.password}};
+         if($scope.user.username!=null && $scope.user.password !=null){
+                 
+        connectServer.getResponse(url,"POST",param).success(function (data) {
+          $ionicLoading.hide();
+          var obj = data.data;
+          sessionStorage.setItem('userId',obj.userId);
+          sessionStorage.setItem('sessionId',obj.sessionId);
+          sessionStorage.setItem('shiftTimmings',obj.shiftTimmings);
+          sessionStorage.setItem('pickUpPoint',obj.pickUpPoint);
+          if(obj.pickUpPoint !=null  && obj.pickUpPoint !=""){
+             $state.go('app.dashboard');
+          }
+          else{
+             $state.go('app.profile');
+          }
+          }).error(function (data) {
+            $rootScope.showAlert(data.message);
+            $ionicLoading.hide();
+        });
+
      }else{
             $ionicLoading.hide();
             $rootScope.showAlert('Please enter username/ password');
@@ -116,7 +125,7 @@ angular.module('starter.controllers', [])
     }
  }])
 
-.controller('profileCtrl', function($scope, $state ,$http, $rootScope, $ionicLoading, $ionicPopup) {
+.controller('profileCtrl', function($scope, $state ,$http, $rootScope, $ionicLoading, $ionicPopup ,connectServer,connectServerToGet) {
            $ionicLoading.show({template: 'Loading...'});
             $scope.routes=[];
             $scope.user={userId : null, homelocation : null, shifttiming : null , mobile : null, pickuppoint: null,empId : null , email : null };
@@ -125,28 +134,13 @@ angular.module('starter.controllers', [])
             var sessionId=  sessionStorage.sessionId;
              var params = {"sessionId":sessionId,"userId":userId};
             var url="http://123.63.36.182:8084/roster_app/api/v1/routes/list";
-            $http({
-                  url: url,
-                  dataType: "json",
-                  contentType: "application/json",
-                  method: "GET",
-                  timeout:20000,
-                  params: params
-                  
-                  }).success(function (data, status, headers, config) {
-                     //alert(" success for Registration: "+JSON.stringify(data));
-                     $scope.routes=data.data;
-                     //Get And display
-                     var url="http://123.63.36.182:8084/roster_app/api/v1/user/profile";
-                     $http({
-                           url: url,
-                           dataType: "json",
-                           contentType: "application/json",
-                           method: "GET",
-                           timeout:20000,
-                           params: params
-                           
-                 }).success(function (data, status, headers, config) {
+            connectServerToGet.getResponse(url,"GET",params).success(function (data) {
+        
+            $scope.routes=data.data;
+            //Get And display
+            var url="http://123.63.36.182:8084/roster_app/api/v1/user/profile";
+            connectServerToGet.getResponse(url,"GET",params).success(function (data) {
+
                   $ionicLoading.hide();
                   var response=data.data;
                   $scope.user.name=response.displayName;
@@ -198,26 +192,15 @@ angular.module('starter.controllers', [])
         var url="http://123.63.36.182:8084/roster_app/api/v1/user/update?sessionId="+sessionId+"&userId="+userId;
         var param={"json":{"userId" : userId, "homeLocation" : $scope.user.homelocation, "shiftTimmings" :  $scope.user.shifttiming , "mobile" :parseInt($scope.user.mobile) , "pickUpPoint" :$scope.myRoute.id}};
         if($scope.user.homelocation != null && $scope.user.mobile !=null && $scope.myRoute.id !=null){
-        $http({
-              url: url,
-              headers:{
-              'Access-Control-Allow-Origin': 'Origin, X-Requested-With, Content-Type, Accept',
-              'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-              'Access-Control-Allow-Headers': 'Content-Type, X-Requested-With',
-              'X-Random-Shit':'123123123'
-              },
-              method: "PUT",
-              timeout:20000,
-              data : param
-        }).success(function (data, status, headers, config) {
+        connectServer.getResponse(url,"PUT",param).success(function (data) {
                          
              $rootScope.showAlert('Profile updated successfully!!!');
              $ionicLoading.hide();
-             $state.go('app.dashboard');
-             }).error(function (data, status, headers, config) {
-                      //alert('Please fill up all details');
-                       $rootScope.showAlert('Please fill up all details');
-                      $ionicLoading.hide();
+             $state.go('app.login');
+        }).error(function (data, status, headers, config) {
+              //alert('Please fill up all details');
+               $rootScope.showAlert('Please fill up all details');
+              $ionicLoading.hide();
             });
         }
         else{
@@ -228,7 +211,7 @@ angular.module('starter.controllers', [])
         })
 
 
-.controller('dashboardCtrl',['$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup' , function($scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,geolocation) {
+.controller('dashboardCtrl',['$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer' , function($scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,geolocation) {
 
     var userId= sessionStorage.userId;
     var sessionId=  sessionStorage.sessionId;
@@ -347,20 +330,13 @@ angular.module('starter.controllers', [])
           var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
           
           var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
-              $http({
-                    url: url,
-                    dataType: "json",
-                    contentType: "application/json",
-                    method: "POST",
-                    timeout:50000,
-                    data: param
-                    
-                    }).success(function (data, status, headers, config) {
+             
+             connectServer.getResponse(url,"POST",param).success(function (data) {
                            $ionicLoading.hide();
                            $state.go('app.currentlocation', null, { reload: true });
                     }).error(function (data, status, headers, config) {
                         $ionicLoading.hide();
-                        $rootScope.showAlert('Error in sending updates to service');
+                        //$rootScope.showAlert('Error in sending updates to service');
                     });
               }
               } else {
@@ -375,7 +351,7 @@ angular.module('starter.controllers', [])
          }
          
          }])
-.controller('currenLocationCtrl',['$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup' ,  function($scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup , geolocation) {
+.controller('currenLocationCtrl',['$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet',  function($scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, geolocation) {
                   $scope.currentLocation=[];
                   $scope.refresh=function(){
                   $ionicLoading.show({template: 'Loading...'});
@@ -385,15 +361,8 @@ angular.module('starter.controllers', [])
                   var param = {"sessionId":sessionId,"userId":userId};
                   var url="http://123.63.36.182:8084/roster_app/api/v1/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
                   //alert(JSON.stringify(param)+ " url: "+url);
-                  $http({
-                        url: url,
-                        dataType: "json",
-                        contentType: "application/json",
-                        method: "GET",
-                        timeout:20000,
-                        params: param
-                        
-                        }).success(function (data, status, headers, config) {
+                  connectServerToGet.getResponse(url,"GET",param).success(function (data) {
+
                            $ionicLoading.hide();
                            $scope.currentLocation=data.data;
                         }).error(function (data, status, headers, config) {
@@ -474,9 +443,7 @@ angular.module('starter.controllers', [])
                               console.log('cancelled');
                               }
                               });
-            
-            
-            }
+                        }
             });
 
 
