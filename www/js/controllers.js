@@ -84,8 +84,18 @@ angular.module('starter.controllers', [])
     })
 
 .controller('loginCtrl',['$config','$scope','$state','$http','$rootScope','$ionicLoading', '$ionicPopup','connectServer', function($config,$scope,$state,  $http, $rootScope,$ionicLoading, $ionicPopup,connectServer ) {
-     $scope.user = {username: null,password: null};
+     $scope.user = {username: null,password: null, remember:false};
      timeInterval=null;
+                         
+        var  username= localStorage.username;
+        var  pwd= localStorage.pwd;
+        if(username != "undefined" && pwd !="undefined" && username != null && pwd != null && username != '' && pwd != ''){
+            $scope.user.username = username;
+            $scope.user.password = pwd;
+            $scope.user.remember=true;
+         }else{
+            $scope.user.remember=false;
+         }
                          
      $rootScope.showAlert = function(msg) {
      var alertPopup = $ionicPopup.alert({title: 'MESSAGE',template: msg});
@@ -100,7 +110,15 @@ angular.module('starter.controllers', [])
          // var param={"json":{"username" : "FWIN01112", "password" : "fulcrum#1"}};
          var param={"json":{"username" : $scope.user.username, "password" : $scope.user.password}};
          if($scope.user.username!=null && $scope.user.password !=null){
-                 
+             if($scope.user.remember){
+                 localStorage.setItem('username',$scope.user.username);
+                 localStorage.setItem('pwd',$scope.user.password);
+
+             }else{
+                 localStorage.setItem('username','');
+                 localStorage.setItem('pwd','');
+                 $scope.user.remember=false;
+             }
             connectServer.getResponse(url,"POST",param).success(function (data) {
                 $ionicLoading.hide();
                 var obj = data.data;

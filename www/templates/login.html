@@ -17,6 +17,10 @@
         </label>
          <div style="margin-top:10px;padding-top:0px;padding-bottom:10px" ng-show="!user.password.length && validate1">  <span style="padding-left:20%;" ><font style="color:red;">Please enter password</font></span></div>
 
+           <div style="width:60%; margin-left:20%;margin-right:20%;">
+             <ion-checkbox ng-model="user.remember" ng-checked="user.remember" style="border-right:none;border-left:none;">Remember Me</ion-checkbox>
+           </div>
+          
         <label class="item">
          <button class="button button-block  button-positive" style="border-radius:15px;" ng-click="login()">Login</button>
         </label>
