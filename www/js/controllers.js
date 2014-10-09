@@ -195,10 +195,11 @@ angular.module('starter.controllers', [])
             var param={"json":{"userId" : userId, "homeLocation" : $scope.user.homelocation, "shiftTimmings" :  $scope.user.shifttiming , "mobile" :parseInt($scope.user.mobile) , "pickUpPoint" :$scope.myRoute.id}};
             if($scope.user.homelocation != null && $scope.user.mobile !=null && $scope.myRoute.id !=null){
                 connectServer.getResponse(url,"PUT",param).success(function (data) {
-
-                 $rootScope.showAlert('Profile updated successfully!!!');
-                 $ionicLoading.hide();
-                 $state.go('app.login');
+                    sessionStorage.setItem('shiftTimmings',$scope.user.shifttiming);
+                    sessionStorage.setItem('pickUpPoint',$scope.myRoute.id);
+                    $rootScope.showAlert('Profile updated successfully!!!');
+                    $ionicLoading.hide();
+                    $state.go('app.profile');
                 }).error(function (data, status, headers, config) {
                   //alert('Please fill up all details');
                    $rootScope.showAlert('Please fill up all details');
