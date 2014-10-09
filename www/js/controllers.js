@@ -72,7 +72,7 @@ angular.module('starter.controllers', [])
             sessionStorage.setItem('pickUpPoint',null);
               $state.go('app.login');
             }
-            $scope.profile=function(){
+              $scope.profile=function(){
               $state.go('app.profile');
             }
             $scope.dashboard=function(){
@@ -330,7 +330,28 @@ angular.module('starter.controllers', [])
                   
          
     var geolocationSuccess = function(position) {
-        codeLatLng(position.coords.latitude ,position.coords.longitude );
+         var networkState=null;
+         var deviceOS= device.platform;
+         if(deviceOS.toLowerCase() == "ios"){
+           networkState = Connection.CELL;
+         }else{
+           networkState = navigator.connection.type;
+         }
+         var states = {};
+         states[Connection.UNKNOWN]  = 'Unknown connection';
+         states[Connection.ETHERNET] = 'Ethernet connection';
+         states[Connection.WIFI]     = 'WiFi connection';
+         states[Connection.CELL_2G]  = 'Cell 2G connection';
+         states[Connection.CELL_3G]  = 'Cell 3G connection';
+         states[Connection.CELL_4G]  = 'Cell 4G connection';
+         states[Connection.CELL]     = 'Cell generic connection';
+         states[Connection.NONE]     = 'No network connection';
+         if(states[networkState] =="Unknown connection" || states[networkState] =="No network connection"){
+            $ionicLoading.hide();
+
+         }else{
+            codeLatLng(position.coords.latitude ,position.coords.longitude );
+         }
     }
     function geolocationError(error) {
         $rootScope.showAlert('Please make sure you have turn ON location services');
@@ -388,7 +409,7 @@ angular.module('starter.controllers', [])
                   }
               } else {
                 $ionicLoading.hide();
-                $rootScope.showAlert('Please turn on location services');
+                $rootScope.showAlert('Please check your network connection and/ location services settings');
               }
               
          });
@@ -421,6 +442,11 @@ angular.module('starter.controllers', [])
           }
                                   
  }])
+
+.controller('nonetworkCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup,geolocation) {
+
+            
+})
 
 .controller('EmergDetailsCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup) {
             console.log('In emergency details');
