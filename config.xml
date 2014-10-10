@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>HelloCordova</name>
+<widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>TrackMe</name>
     <description>
         An Ionic Framework and Cordova project.
     </description>
@@ -12,6 +12,13 @@
     <preference name="webviewbounce" value="false" />
     <preference name="UIWebViewBounce" value="false" />
     <preference name="DisallowOverscroll" value="true" />
+
+    <gap:plugin name="org.apache.cordova.geolocation"  />
+    <gap:plugin name="de.appplant.cordova.plugin.background-mode"  />
+    <gap:plugin name="nl.x-services.plugins.socialsharing"  />
+    <gap:plugin name="org.apache.cordova.contacts"  />
+    <gap:plugin name="org.apache.cordova.splashscreen"  />
+    
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
@@ -31,14 +38,24 @@
     <feature name="Contacts">
         <param name="ios-package" value="CDVContacts" />
     </feature>
-    <!-- Don't store local data in an iCloud backup. Turn this to "cloud" to enable storage 
-         to be sent to iCloud. Note: enabling this could result in Apple rejecting your app.
-    -->
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+    </feature>
+
     <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="20000" />
+
     <feature name="Geolocation">
         <param name="ios-package" value="CDVLocation" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.SplashScreen" />
     </feature>
     <feature name="StatusBar">
       <param name="ios-package" value="CDVStatusBar" onload="true" />
     </feature>
+
+
+
 </widget>
