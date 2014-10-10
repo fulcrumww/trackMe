@@ -345,7 +345,7 @@ angular.module('starter.controllers', [])
                              
                        
     $scope.startTracking=function(){
-            timeInterval=50000;
+            timeInterval=180000;
                try {
         $ionicLoading.show({template: 'Loading...'});
         if(navigator.geolocation){
