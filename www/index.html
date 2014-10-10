@@ -41,9 +41,16 @@
 
          }
         window.plugin.backgroundMode.enable();
+        document.addEventListener("backbutton", onBackKeyDown, false);
         navigator.splashscreen.hide();
 
     });
+    function onBackKeyDown(evt) {
+        alert("onBackKeyDown");
+        evt.preventDefault();
+        evt.stopPropagation();
+        return;
+    }
   </script>
   </body>
 </html>
