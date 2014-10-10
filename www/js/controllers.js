@@ -217,7 +217,7 @@ angular.module('starter.controllers', [])
                     sessionStorage.setItem('pickUpPoint',$scope.myRoute.id);
                     $rootScope.showAlert('Profile updated successfully!!!');
                     $ionicLoading.hide();
-                    $state.go('app.profile');
+                    $state.go('app.dashboard');
                 }).error(function (data, status, headers, config) {
                   //alert('Please fill up all details');
                    $rootScope.showAlert('Please fill up all details');
