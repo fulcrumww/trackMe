@@ -1,0 +1,85 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.fulcrumww.trackme" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:gap="http://phonegap.com/ns/1.0">
+    <name>TrackMe</name>
+    <description>
+       'TrackMe' helps to find the current location of a person
+    </description>
+    <author email="hi@ionicframework" href="http://ionicframework.com/">
+      Fulcrum Worldwide Pvt. Ltd
+    </author>
+    <content src="index.html" />
+    <access origin="*" />
+    <preference name="webviewbounce" value="false" />
+    <preference name="UIWebViewBounce" value="false" />
+    <preference name="DisallowOverscroll" value="true" />
+
+    <gap:plugin name="org.apache.cordova.geolocation"  />
+    <gap:plugin name="de.appplant.cordova.plugin.background-mode"  />
+    <gap:plugin name="nl.x-services.plugins.socialsharing"  />
+    <gap:plugin name="org.apache.cordova.contacts"  />
+    <gap:plugin name="org.apache.cordova.splashscreen"  />
+    <gap:plugin name="org.apache.cordova.device"  />
+    <gap:plugin name="org.apache.cordova.network-information"  />
+
+    <gap:splash src="screen.png" />
+
+    <gap:splash src="android_res/drawable-port-ldpi/screen.png" gap:platform="android"  />
+    <gap:splash src="android_res/drawable-port-mdpi/screen.png" gap:platform="android"  />
+    <gap:splash src="android_res/drawable-port-hdpi/screen.png" gap:platform="android"  />
+    <gap:splash src="android_res/drawable-port-xhdpi/screen.png" gap:platform="android"  />
+
+    <feature name="LocalStorage">
+        <param name="ios-package" value="CDVLocalStorage" />
+    </feature>
+    <feature name="Console">
+        <param name="ios-package" value="CDVLogger" />
+    </feature>
+    <feature name="Device">
+        <param name="ios-package" value="CDVDevice" />
+    </feature>
+    <feature name="Keyboard">
+        <param name="ios-package" onload="true" value="IonicKeyboard" />
+    </feature>
+    <feature name="BackgroundMode">
+        <param name="ios-package" onload="true" value="APPBackgroundMode" />
+        <param name="onload" value="true" />
+    </feature>
+    <feature name="Contacts">
+        <param name="ios-package" value="CDVContacts" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="ios-package" value="CDVSplashScreen" />
+    </feature>
+
+    <preference name="BackupWebStorage" value="none" />
+    <preference name="SplashScreen" value="screen" />
+    <preference name="SplashScreenDelay" value="20000" />
+
+    <feature name="Geolocation">
+        <param name="ios-package" value="CDVLocation" />
+    </feature>
+    <feature name="SplashScreen">
+        <param name="android-package" value="org.apache.cordova.SplashScreen" />
+    </feature>
+    <feature name="StatusBar">
+      <param name="ios-package" value="CDVStatusBar" onload="true" />
+    </feature>
+    <!-- iPhone and iPod touch -->
+    <gap:splash src="iOS_Resources/splash/Default~iphone.png" gap:platform="ios" width="320" height="480" />
+    <gap:splash src="iOS_Resources/splash/Default@2x~iphone.png" gap:platform="ios" width="640" height="960" />
+
+    <!-- iPhone 5 / iPod Touch (5th Generation) -->
+    <gap:splash src="iOS_Resources/splash/Default-568h@2x~iphone.png" gap:platform="ios" />
+
+    <!-- iPad -->
+    <gap:splash src="iOS_Resources/splash/Default-Portrait~ipad.png" gap:platform="ios"/>
+    <gap:splash src="iOS_Resources/splash/Default-Landscape~ipad.png" gap:platform="ios" />
+
+    <!-- Retina iPad -->
+    <gap:splash src="iOS_Resources/splash/Default-Portrait@2x~ipad.png" gap:platform="ios"/>
+    <gap:splash src="iOS_Resources/splash/Default-Landscape@2x~ipad.png" gap:platform="ios"/>
+
+
+
+
+</widget>

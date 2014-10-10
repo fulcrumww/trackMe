@@ -1,10 +1,14 @@
 
 angular.module('starter', ['ionic', 'starter.controllers'])
 
-.run(function($ionicPlatform) {
+.run(function($ionicPlatform, $window, $rootScope,$n) {
+        document.addEventListener("offline", $n.onOffline, false);
+        document.addEventListener("online", $n.onOnline, false);
+
   $ionicPlatform.ready(function() {
     // Hide the accessory bar by default (remove this to show the accessory bar above the keyboard
     // for form inputs)
+      navigator.splashscreen.hide();
     if(window.cordova && window.cordova.plugins.Keyboard) {
       cordova.plugins.Keyboard.hideKeyboardAccessoryBar(false);
     }
@@ -13,8 +17,34 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
     window.plugin.backgroundMode.enable();
+      $rootScope.online = navigator.onLine;
+
   });
 })
+.service("$n", ["$config", "$location", "$window", "$state", "$rootScope",
+    function($config, $location, $window, $state, $root){
+        var $n = {
+
+            connected : true,
+
+            onOffline : function(){
+                $root.$apply(function(){
+                    $n.connected = false;
+                    $state.go('app.nonetwork');
+                });
+            },
+
+            onOnline : function(){
+                $root.$apply(function(){
+                    $n.connected = true;
+                    $window.history.back();
+                   // $state.go('app.dashboard');
+                });
+
+            }
+        };
+        return $n;
+    }])
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
@@ -71,6 +101,15 @@ angular.module('starter', ['ionic', 'starter.controllers'])
        controller: 'EmergDetailsCtrl'
        }
         }
+    })
+    .state('app.nonetwork', {
+       url: "/nonetwork",
+       views: {
+       'menuContent' :{
+         templateUrl: "templates/nonetwork.html",
+         controller: 'nonetworkCtrl'
+        }
+     }
     });
     
 // if none of the above states are matched, use this as the fallback

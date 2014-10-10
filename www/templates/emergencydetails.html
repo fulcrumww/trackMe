@@ -2,14 +2,12 @@
     <ion-nav-buttons side="left">
         <button menu-toggle="left" class="button button-icon icon ion-navicon"></button>
     </ion-nav-buttons>
-    <h1 class="title">Emergency Contact</h1>
+    <h1 class="title"></h1>
     <ion-nav-buttons side="right">
-        <button class="button ion-ios7-plus-empty" ng-click="pickContact()"></button>
+        <button class="button ion-person-stalker" ng-click="pickContact()"></button>
     </ion-nav-buttons>
     <ion-content>
-        <div class="content">
-                
-            
+        <div class="content">            
             <div class="list">
                     <a class="item item-icon-right" ng-repeat="contact in data.selectedContacts">
                         <i class="icon ion-trash-a" ng-click="removeContact(contact);"></i>
