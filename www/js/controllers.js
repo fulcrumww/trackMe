@@ -239,14 +239,26 @@ angular.module('starter.controllers', [])
     $scope.stopTracking=function(){
 
         if( timeInterval != null){
-            $rootScope.showAlert('Tracking stopped successfully');
-            timeInterval=null;
+
+            var confirmPopup = $ionicPopup.confirm({title: 'Stop Tracking',template: 'Are you sure you want to stop tracking?'});
+            confirmPopup.then(function(res) {
+                if(res) {
+                    $rootScope.showAlert('Tracking stopped successfully');
+                    timeInterval=null;
+                    clearInterval(stop);
+                    stop="undefined";
+                } else {
+                    console.log('cancelled');
+                }
+            });
+
         }else{
-            $rootScope.showAlert('Tracking is not started');
+            $rootScope.showAlert('Tracking is not started yet');
             timeInterval=null;
+            clearInterval(stop);
+            stop="undefined";
         }
-        clearInterval(stop);
-        stop="undefined";
+
     }
                         
     $scope.viewRoute=function(){
@@ -416,7 +428,7 @@ angular.module('starter.controllers', [])
 
                     connectServer.getResponse(url,"POST",param).success(function (data) {
                                $ionicLoading.hide();
-                               $state.go('app.currentlocation', null, { reload: true });
+                              // $state.go('app.currentlocation', null, { reload: true });
                         }).error(function (data, status, headers, config) {
                             $ionicLoading.hide();
                             //$rootScope.showAlert('Error in sending updates to service');
