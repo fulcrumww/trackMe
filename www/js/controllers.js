@@ -194,7 +194,7 @@ angular.module('starter.controllers', [])
             $scope.user.shifttiming= shiftTiming;
         }
        
-      // POst Data to service
+
         $scope.getSelectedRoute=function(myRoute){
            $scope.myRoute=myRoute;
         }
@@ -206,7 +206,7 @@ angular.module('starter.controllers', [])
               $state.go('app.login');
             }
         }
-
+// POst Data to service
         $scope.submit=function(){
             $ionicLoading.show({template: 'Updating...'});
             var url= $config.serviceUrl + "/user/update?sessionId="+sessionId+"&userId="+userId;
@@ -217,7 +217,7 @@ angular.module('starter.controllers', [])
                     sessionStorage.setItem('pickUpPoint',$scope.myRoute.id);
                     $rootScope.showAlert('Profile updated successfully!!!');
                     $ionicLoading.hide();
-                    $state.go('app.profile');
+                    $state.go('app.dashboard');
                 }).error(function (data, status, headers, config) {
                   //alert('Please fill up all details');
                    $rootScope.showAlert('Please fill up all details');

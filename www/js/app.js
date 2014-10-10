@@ -17,7 +17,6 @@ angular.module('starter', ['ionic', 'starter.controllers'])
       StatusBar.styleDefault();
     }
     window.plugin.backgroundMode.enable();
-      $rootScope.online = navigator.onLine;
 
   });
 })
