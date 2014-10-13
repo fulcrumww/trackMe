@@ -19,7 +19,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     window.plugin.backgroundMode.enable();
 
   });
+        $ionicPlatform.registerBackButtonAction(function () {
+
+            event.preventDefault();
+            event.stopPropagation();
+        }, 100);
 })
+
 .service("$n", ["$config", "$location", "$window", "$state", "$rootScope",
     function($config, $location, $window, $state, $root){
         var $n = {
