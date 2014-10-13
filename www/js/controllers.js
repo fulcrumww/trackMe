@@ -357,7 +357,7 @@ angular.module('starter.controllers', [])
         }catch(err) {
           $rootScope.showAlert(err.message);
         }
-        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000}); $rootScope.timeInterval=true;}, timeInterval);
+        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000}); $ionicLoading.hide(); $rootScope.timeInterval=true;}, timeInterval);
        
     }
                   
@@ -430,12 +430,14 @@ angular.module('starter.controllers', [])
                   var url= $config.serviceUrl + "/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
 
                     connectServer.getResponse(url,"POST",param).success(function (data) {
-                               $ionicLoading.hide();
-                        $state.go($state.current, {}, {reload: true});
+                        $ionicLoading.hide();
+
                         if( $rootScope.timeInterval== false){
                              $rootScope.showAlert('Tracking started successfully');
                              $state.go('app.currentlocation', null, {  });
-                         }
+                         }else{
+                            $state.go($state.current, {}, {reload: true});
+                        }
                         }).error(function (data, status, headers, config) {
                             $ionicLoading.hide();
                             //$rootScope.showAlert('Error in sending updates to service');
@@ -453,7 +455,7 @@ angular.module('starter.controllers', [])
      }
          
 }])
-.controller('currenLocationCtrl',['$config','$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet',  function($config,$scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, geolocation) {
+.controller('currenLocationCtrl',['$config','$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet','$ionicScrollDelegate',  function($config,$scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, $ionicScrollDelegate,  geolocation) {
           $scope.currentLocation=[];
           $scope.refresh=function(){
               $ionicLoading.show({template: 'Loading...'});
@@ -465,7 +467,10 @@ angular.module('starter.controllers', [])
               //alert(JSON.stringify(param)+ " url: "+url);
               connectServerToGet.getResponse(url,"GET",param).success(function (data) {
                   $ionicLoading.hide();
+                  // Make the chat window scroll to the bottom
+                  $ionicScrollDelegate.scrollBottom();
                   $scope.currentLocation=data.data;
+
               }).error(function (data, status, headers, config) {
                   $ionicLoading.hide();
                   $rootScope.showAlert(JSON.stringify(data.message));
