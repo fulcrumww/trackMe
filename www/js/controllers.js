@@ -66,6 +66,7 @@ angular.module('starter.controllers', [])
             $scope.logOut=function(){
             clearInterval(stop);
             stop="undefined";
+            $rootScope.timeInterval=false;
             sessionStorage.setItem('userId',null);
             sessionStorage.setItem('sessionId',null);
             sessionStorage.setItem('shiftTimmings',null);
@@ -232,7 +233,6 @@ angular.module('starter.controllers', [])
  })
 .controller('dashboardCtrl',['$config','$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer','$q' , function($config,$scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,$q,geolocation) {
 
-
     var userId= sessionStorage.userId;
     var sessionId=  sessionStorage.sessionId;
     $rootScope.page="dashboard";
@@ -240,13 +240,14 @@ angular.module('starter.controllers', [])
 
         if( timeInterval != null){
 
-            var confirmPopup = $ionicPopup.confirm({title: 'Stop Tracking',template: 'Are you sure you want to stop tracking?'});
+            var confirmPopup = $ionicPopup.confirm({title: 'CONFIRMATION',template: 'Are you sure you want to stop tracking?'});
             confirmPopup.then(function(res) {
                 if(res) {
                     $rootScope.showAlert('Tracking stopped successfully');
                     timeInterval=null;
                     clearInterval(stop);
                     stop="undefined";
+                    $rootScope.timeInterval=false;
                 } else {
                     console.log('cancelled');
                 }
@@ -257,6 +258,7 @@ angular.module('starter.controllers', [])
             timeInterval=null;
             clearInterval(stop);
             stop="undefined";
+            $rootScope.timeInterval=false;
         }
 
     }
@@ -350,11 +352,12 @@ angular.module('starter.controllers', [])
         $ionicLoading.show({template: 'Loading...'});
         if(navigator.geolocation){
           navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000 });
+            $rootScope.timeInterval= false;
         }
         }catch(err) {
           $rootScope.showAlert(err.message);
         }
-        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000});}, timeInterval);
+        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000}); $rootScope.timeInterval=true;}, timeInterval);
        
     }
                   
@@ -428,7 +431,11 @@ angular.module('starter.controllers', [])
 
                     connectServer.getResponse(url,"POST",param).success(function (data) {
                                $ionicLoading.hide();
-                              // $state.go('app.currentlocation', null, { reload: true });
+                        $state.go($state.current, {}, {reload: true});
+                        if( $rootScope.timeInterval== false){
+                             $rootScope.showAlert('Tracking started successfully'+$rootScope.timeInterval);
+                             $state.go('app.currentlocation', null, {  });
+                         }
                         }).error(function (data, status, headers, config) {
                             $ionicLoading.hide();
                             //$rootScope.showAlert('Error in sending updates to service');
@@ -448,7 +455,6 @@ angular.module('starter.controllers', [])
 }])
 .controller('currenLocationCtrl',['$config','$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet',  function($config,$scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, geolocation) {
           $scope.currentLocation=[];
-
           $scope.refresh=function(){
               $ionicLoading.show({template: 'Loading...'});
               var userId= sessionStorage.userId;
