@@ -433,7 +433,7 @@ angular.module('starter.controllers', [])
                                $ionicLoading.hide();
                         $state.go($state.current, {}, {reload: true});
                         if( $rootScope.timeInterval== false){
-                             $rootScope.showAlert('Tracking started successfully'+$rootScope.timeInterval);
+                             $rootScope.showAlert('Tracking started successfully');
                              $state.go('app.currentlocation', null, {  });
                          }
                         }).error(function (data, status, headers, config) {
