@@ -62,8 +62,8 @@ angular.module('starter.controllers', [])
         };
         return service;
     }])
-.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state) {
-            $scope.logOut=function(){
+.controller('AppCtrl', function($scope, $ionicModal, $timeout, $state,$rootScope) {
+          $scope.logOut=function(){
             clearInterval(stop);
             stop="undefined";
             $rootScope.timeInterval=false;
@@ -300,7 +300,7 @@ angular.module('starter.controllers', [])
              );
 
         }else{
-            $rootScope.showAlert("Please add 'Emergency contacts' first");
+            $rootScope.showAlert("Please add 'Emergency contacts' ");
 
         }
                             
@@ -379,9 +379,8 @@ angular.module('starter.controllers', [])
          states[Connection.CELL_4G]  = 'Cell 4G connection';
          states[Connection.CELL]     = 'Cell generic connection';
          states[Connection.NONE]     = 'No network connection';
-         if(states[networkState] =="Unknown connection" || states[networkState] =="No network connection"){
+         if( states[networkState] =="No network connection"){
             $ionicLoading.hide();
-
          }else{
             codeLatLng(position.coords.latitude ,position.coords.longitude );
          }
