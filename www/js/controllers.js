@@ -67,8 +67,8 @@ angular.module('starter.controllers', [])
             clearInterval(stop);
             stop="undefined";
             $rootScope.timeInterval=false;
-            sessionStorage.setItem('userId',null);
-            sessionStorage.setItem('sessionId',null);
+            localStorage.setItem('userId',null);
+            localStorage.setItem('sessionId',null);
             sessionStorage.setItem('shiftTimmings',null);
             sessionStorage.setItem('pickUpPoint',null);
               $state.go('app.login');
@@ -123,8 +123,8 @@ angular.module('starter.controllers', [])
             connectServer.getResponse(url,"POST",param).success(function (data) {
                 $ionicLoading.hide();
                 var obj = data.data;
-                sessionStorage.setItem('userId',obj.userId);
-                sessionStorage.setItem('sessionId',obj.sessionId);
+                localStorage.setItem('userId',obj.userId);
+                localStorage.setItem('sessionId',obj.sessionId);
                 sessionStorage.setItem('shiftTimmings',obj.shiftTimmings);
                 sessionStorage.setItem('pickUpPoint',obj.pickUpPoint);
                 if(obj.pickUpPoint !=null  && obj.pickUpPoint !=""){
@@ -150,8 +150,8 @@ angular.module('starter.controllers', [])
             $scope.routes=[];
             $scope.user={userId : null, homelocation : null, shifttiming : null , mobile : null, pickuppoint: null,empId : null , email : null };
             $scope.myRoute={ id : null};
-            var userId= sessionStorage.userId;
-            var sessionId=  sessionStorage.sessionId;
+            var userId= localStorage.userId;
+            var sessionId=  localStorage.sessionId;
             var params = {"sessionId":sessionId,"userId":userId};
             var url= $config.serviceUrl + "/routes/list";
             connectServerToGet.getResponse(url,"GET",params).success(function (data) {
@@ -233,8 +233,8 @@ angular.module('starter.controllers', [])
  })
 .controller('dashboardCtrl',['$config','$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer','$q' , function($config,$scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,$q,geolocation) {
 
-    var userId= sessionStorage.userId;
-    var sessionId=  sessionStorage.sessionId;
+    var userId= localStorage.userId;
+    var sessionId=  localStorage.sessionId;
     $rootScope.page="dashboard";
     $scope.stopTracking=function(){
 
@@ -423,8 +423,8 @@ angular.module('starter.controllers', [])
 
                 if(address !=null){
 
-                  var userId= sessionStorage.userId;
-                  var sessionId=  sessionStorage.sessionId;
+                  var userId= localStorage.userId;
+                  var sessionId=  localStorage.sessionId;
                   var param={"json":{"routesId" : parseInt(sessionStorage.pickUpPoint), "shiftTimmings" : sessionStorage.shiftTimmings , "currentLocation" : redefinedAddress}};
 
                   var url= $config.serviceUrl + "/routes/travel-history?sessionId="+sessionId+"&userId="+userId;
@@ -459,8 +459,8 @@ angular.module('starter.controllers', [])
           $scope.currentLocation=[];
           $scope.refresh=function(){
               $ionicLoading.show({template: 'Loading...'});
-              var userId= sessionStorage.userId;
-              var sessionId=  sessionStorage.sessionId;
+              var userId= localStorage.userId;
+              var sessionId=  localStorage.sessionId;
 
               var param = {"sessionId":sessionId,"userId":userId};
               var url= $config.serviceUrl + "/routes/travel-history/list/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
