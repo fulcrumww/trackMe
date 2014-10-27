@@ -66,6 +66,7 @@ angular.module('starter.controllers', [])
           $scope.logOut=function(){
             clearInterval(stop);
             stop="undefined";
+            $rootScope.page="menu";
             $rootScope.timeInterval=false;
             localStorage.setItem('userId',null);
             localStorage.setItem('sessionId',null);
@@ -146,8 +147,9 @@ angular.module('starter.controllers', [])
  }])
 
 .controller('profileCtrl', function($config,$scope, $state ,$http, $rootScope, $ionicLoading, $ionicPopup ,connectServer,connectServerToGet) {
-           $ionicLoading.show({template: 'Loading...'});
+            $ionicLoading.show({template: 'Loading...'});
             $scope.routes=[];
+            $rootScope.page="profile";
             $scope.user={userId : null, homelocation : null, shifttiming : null , mobile : null, pickuppoint: null,empId : null , email : null };
             $scope.myRoute={ id : null};
             var userId= localStorage.userId;
@@ -386,7 +388,7 @@ angular.module('starter.controllers', [])
          }
     }
     function geolocationError(error) {
-        $rootScope.showAlert('Please make sure you have turn ON location services');
+        $rootScope.showAlert('Skipped finding current location. Please make sure you have turn ON location services');
         $ionicLoading.hide();
     }
     
@@ -456,6 +458,7 @@ angular.module('starter.controllers', [])
 }])
 .controller('currenLocationCtrl',['$config','$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet','$ionicScrollDelegate',  function($config,$scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, $ionicScrollDelegate,  geolocation) {
           $scope.currentLocation=[];
+          $rootScope.page="currentLocation";
           $scope.refresh=function(){
               $ionicLoading.show({template: 'Loading...'});
               var userId= localStorage.userId;
@@ -484,12 +487,13 @@ angular.module('starter.controllers', [])
  }])
 
 .controller('nonetworkCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup,geolocation) {
-
+       $rootScope.page="nonetwork";
             
 })
 
 .controller('EmergDetailsCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup) {
             console.log('In emergency details');
+            $rootScope.page="emergencyDetails";
             var savedEmgrContact = null;
             if(window.localStorage.getItem('emergencyContacts') != null) {
                 savedEmgrContact = JSON.parse(window.localStorage.getItem('emergencyContacts'));
