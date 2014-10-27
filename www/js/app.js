@@ -1,7 +1,7 @@
 
 angular.module('starter', ['ionic', 'starter.controllers'])
 
-.run(function($ionicPlatform, $window, $rootScope,$n) {
+.run(function($ionicPlatform, $window, $rootScope,$n, $state) {
         document.addEventListener("offline", $n.onOffline, false);
         document.addEventListener("online", $n.onOnline, false);
 
@@ -20,10 +20,23 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   });
         $ionicPlatform.registerBackButtonAction(function () {
-
-            event.preventDefault();
-            event.stopPropagation();
+          //alert('current page: '+$rootScope.page);
+          if($rootScope.page != "dashboard" && $rootScope.page != "login"){
+              $state.go('app.dashboard');
+          }else{
+            /*navigator.home.home(function(){
+                               // alert("Successfully launched home intent");
+                                }, function(){
+                               // alert("Error launching home intent");
+                                });*/
+            navigator.Backbutton.goHome(function() {
+                    // alert('success')
+                }, function() {
+                    // console.log('fail')
+                });
+          }
         }, 100);
+  
 })
 
 .service("$n", ["$config", "$location", "$window", "$state", "$rootScope",

@@ -18,7 +18,7 @@
     <gap:plugin name="nl.x-services.plugins.socialsharing"  />
     <gap:plugin name="org.apache.cordova.contacts"  />
     <gap:plugin name="org.apache.cordova.splashscreen"  />
-    
+    <gap:plugin name="com.badrit.backbutton"  />
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
