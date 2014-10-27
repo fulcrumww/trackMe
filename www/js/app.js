@@ -20,17 +20,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   });
         $ionicPlatform.registerBackButtonAction(function () {
-          //alert('current page: '+$rootScope.page);
           if($rootScope.page != "dashboard" && $rootScope.page != "login"){
               $state.go('app.dashboard');
           }else{
-            /*navigator.home.home(function(){
-                               // alert("Successfully launched home intent");
-                                }, function(){
-                               // alert("Error launching home intent");
-                                });*/
             navigator.Backbutton.goHome(function() {
+                    // alert('success');
                 }, function() {
+                    // alert('fail');
                 });
           }
         }, 100);
