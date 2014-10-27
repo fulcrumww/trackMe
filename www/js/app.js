@@ -30,9 +30,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                                // alert("Error launching home intent");
                                 });*/
             navigator.Backbutton.goHome(function() {
-                    // alert('success')
                 }, function() {
-                    // console.log('fail')
                 });
           }
         }, 100);
