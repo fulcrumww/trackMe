@@ -20,7 +20,7 @@
     <gap:plugin name="org.apache.cordova.splashscreen"  />
     <gap:plugin name="org.apache.cordova.device"  />
     <gap:plugin name="org.apache.cordova.network-information"  />
-    <gap:plugin name="com.badrit.backbutton.backbuttonplugin"  />
+    <gap:plugin name="com.badrit.backbutton"  />
     <gap:splash src="screen.png" />
 
     <gap:splash src="android_res/drawable-port-ldpi/screen.png" gap:platform="android"  />
@@ -50,7 +50,9 @@
     <feature name="SplashScreen">
         <param name="ios-package" value="CDVSplashScreen" />
     </feature>
-
+    <feature name="BackbuttonPlugin">
+        <param name="android-package" value="com.badrit.Backbutton.BackbuttonPlugin"/>
+    </feature>
     <preference name="BackupWebStorage" value="none" />
     <preference name="SplashScreen" value="screen" />
     <preference name="SplashScreenDelay" value="20000" />
