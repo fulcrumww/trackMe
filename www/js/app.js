@@ -21,8 +21,10 @@ angular.module('starter', ['ionic', 'starter.controllers'])
   });
         $ionicPlatform.registerBackButtonAction(function () {
           if($rootScope.page != "dashboard" && $rootScope.page != "login"){
+              alert('if: '+$rootScope.page);
               $state.go('app.dashboard');
           }else{
+            alert('else: '+$rootScope.page);
             navigator.Backbutton.goHome(function() {
                      alert('success');
                 }, function() {
