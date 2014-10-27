@@ -24,9 +24,9 @@ angular.module('starter', ['ionic', 'starter.controllers'])
               $state.go('app.dashboard');
           }else{
             navigator.Backbutton.goHome(function() {
-                    // alert('success');
+                     alert('success');
                 }, function() {
-                    // alert('fail');
+                     alert('fail');
                 });
           }
         }, 100);
