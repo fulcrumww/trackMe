@@ -19,7 +19,9 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     window.plugin.backgroundMode.enable();
 
   });
-        $ionicPlatform.registerBackButtonAction(function () {
+        $ionicPlatform.registerBackButtonAction(function (event) {
+          event.preventDefault();
+          event.stopPropagation();
           if($rootScope.page != "dashboard" && $rootScope.page != "login"){
               alert('if: '+$rootScope.page);
               $state.go('app.dashboard');
