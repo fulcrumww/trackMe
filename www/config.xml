@@ -20,16 +20,14 @@
     <gap:plugin name="org.apache.cordova.splashscreen"  />
     <gap:plugin name="org.apache.cordova.device"  />
     <gap:plugin name="org.apache.cordova.network-information"  />
-    <gap:plugin name="com.badrit.Backbutton"  />
+    <gap:plugin name="com.badrit.backbutton.backbuttonplugin"  />
     <gap:splash src="screen.png" />
 
     <gap:splash src="android_res/drawable-port-ldpi/screen.png" gap:platform="android"  />
     <gap:splash src="android_res/drawable-port-mdpi/screen.png" gap:platform="android"  />
     <gap:splash src="android_res/drawable-port-hdpi/screen.png" gap:platform="android"  />
     <gap:splash src="android_res/drawable-port-xhdpi/screen.png" gap:platform="android"  />
-    <feature name="BackbuttonPlugin">
-        <param name="android-package" value="com.badrit.Backbutton.BackbuttonPlugin"/>
-    </feature>
+   
     <feature name="LocalStorage">
         <param name="ios-package" value="CDVLocalStorage" />
     </feature>
