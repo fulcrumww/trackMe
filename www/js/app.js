@@ -20,7 +20,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
 
   });
         $ionicPlatform.registerBackButtonAction(function () {
-          //alert('ifff: '+$rootScope.page);
+          alert('ifff: '+$rootScope.page);
           if($rootScope.page != "dashboard" && $rootScope.page != "login"){
              
               $state.go('app.dashboard');
@@ -32,7 +32,7 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                      alert('fail');
                 });
           }
-        }, 1000);
+        }, 6000);
   
 })
 
