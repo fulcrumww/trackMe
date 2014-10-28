@@ -67,7 +67,6 @@ angular.module('starter.controllers', [])
             clearInterval(stop);
             stop="undefined";
             $rootScope.page="menu";
-            localStorage.setItem('pageName','menu');
             $rootScope.timeInterval=false;
             localStorage.setItem('userId',null);
             localStorage.setItem('sessionId',null);
@@ -105,7 +104,7 @@ angular.module('starter.controllers', [])
         alertPopup.then(function(res) {});
      };
      $rootScope.page="login";
-     localStorage.setItem('pageName','login');                    
+                         
      // Login using credientials
      $scope.login=function(){
          $ionicLoading.show({template: 'Loading...'});
@@ -151,7 +150,6 @@ angular.module('starter.controllers', [])
             $ionicLoading.show({template: 'Loading...'});
             $scope.routes=[];
             $rootScope.page="profile";
-            localStorage.setItem('pageName','profile');
             $scope.user={userId : null, homelocation : null, shifttiming : null , mobile : null, pickuppoint: null,empId : null , email : null };
             $scope.myRoute={ id : null};
             var userId= localStorage.userId;
@@ -240,7 +238,6 @@ angular.module('starter.controllers', [])
     var userId= localStorage.userId;
     var sessionId=  localStorage.sessionId;
     $rootScope.page="dashboard";
-    localStorage.setItem('pageName','dashboard');
     $scope.stopTracking=function(){
 
         if( timeInterval != null){
@@ -462,7 +459,6 @@ angular.module('starter.controllers', [])
 .controller('currenLocationCtrl',['$config','$scope','$state','$http','$rootScope', '$ionicLoading', '$ionicPopup','connectServerToGet','$ionicScrollDelegate',  function($config,$scope, $state, $http ,$rootScope,  $ionicLoading, $ionicPopup ,connectServerToGet, $ionicScrollDelegate,  geolocation) {
           $scope.currentLocation=[];
           $rootScope.page="currentLocation";
-          localStorage.setItem('pageName','currentLocation');
           $scope.refresh=function(){
               $ionicLoading.show({template: 'Loading...'});
               var userId= localStorage.userId;
@@ -492,14 +488,12 @@ angular.module('starter.controllers', [])
 
 .controller('nonetworkCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup,geolocation) {
        $rootScope.page="nonetwork";
-       localStorage.setItem('pageName','nonetwork');
             
 })
 
 .controller('EmergDetailsCtrl', function($scope,$rootScope,$http,$state,ContactsService,$filter,$ionicPopup) {
             console.log('In emergency details');
             $rootScope.page="emergencyDetails";
-            localStorage.setItem('pageName','emergencyDetails');
             var savedEmgrContact = null;
             if(window.localStorage.getItem('emergencyContacts') != null) {
                 savedEmgrContact = JSON.parse(window.localStorage.getItem('emergencyContacts'));

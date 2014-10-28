@@ -40,22 +40,11 @@
          function initialize(){
 
          }
-        document.addEventListener("backbutton", onBackKeyDown, false);
-
         window.plugin.backgroundMode.enable();
         navigator.splashscreen.hide();
 
     });
-         function onBackKeyDown() {
-           if(localStorage.pageName == "dashboard" && localStorage.pageName  == "login"){
-               navigator.Backbutton.goHome(function() {
-               alert('success');
-               }, function() {
-               alert('fail');
-               });
-           }
-         }
-
+         
   </script>
   </body>
 </html>
