@@ -40,10 +40,26 @@
          function initialize(){
 
          }
+       // document.addEventListener("backbutton", onBackKeyDown, false);
+
         window.plugin.backgroundMode.enable();
         navigator.splashscreen.hide();
 
     });
+         /*function onBackKeyDown() {
+           alert("back key");
+           if(localStorage.pageName != "dashboard" && localStorage.pageName  != "login"){
+             // alert('if: '+localStorage.pageName );
+             // $state.go('app.dashboard');
+           }else{
+              alert('else: '+localStorage.pageName );
+              navigator.Backbutton.goHome(function() {
+                alert('success');
+              }, function() {
+                alert('fail');
+              });
+           }
+         }*/
 
   </script>
   </body>

@@ -19,21 +19,20 @@ angular.module('starter', ['ionic', 'starter.controllers'])
     window.plugin.backgroundMode.enable();
 
   });
-        $ionicPlatform.registerBackButtonAction(function (event) {
-          event.preventDefault();
-          event.stopPropagation();
+        $ionicPlatform.registerBackButtonAction(function () {
+          //alert('ifff: '+$rootScope.page);
           if($rootScope.page != "dashboard" && $rootScope.page != "login"){
-              alert('if: '+$rootScope.page);
+             
               $state.go('app.dashboard');
           }else{
-            alert('else: '+$rootScope.page);
+           // alert('else: '+$rootScope.page);
             navigator.Backbutton.goHome(function() {
                      alert('success');
                 }, function() {
                      alert('fail');
                 });
           }
-        }, 100);
+        }, 1000);
   
 })
 
