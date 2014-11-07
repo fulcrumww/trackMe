@@ -72,6 +72,7 @@ angular.module('starter.controllers', [])
             localStorage.setItem('sessionId',null);
             sessionStorage.setItem('shiftTimmings',null);
             sessionStorage.setItem('pickUpPoint',null);
+              $rootScope.count = 0;
               $state.go('app.login');
             }
               $scope.profile=function(){
@@ -98,7 +99,7 @@ angular.module('starter.controllers', [])
          }else{
             $scope.user.remember=false;
          }
-                         
+     $rootScope.count = 0;
      $rootScope.showAlert = function(msg) {
      var alertPopup = $ionicPopup.alert({title: 'MESSAGE',template: msg});
         alertPopup.then(function(res) {});
@@ -128,6 +129,7 @@ angular.module('starter.controllers', [])
                 localStorage.setItem('sessionId',obj.sessionId);
                 sessionStorage.setItem('shiftTimmings',obj.shiftTimmings);
                 sessionStorage.setItem('pickUpPoint',obj.pickUpPoint);
+                $rootScope.count = 1;
                 if(obj.pickUpPoint !=null  && obj.pickUpPoint !=""){
                     $state.go('app.dashboard');
                 }
@@ -388,7 +390,12 @@ angular.module('starter.controllers', [])
          }
     }
     function geolocationError(error) {
+       
+        if($rootScope.count == 1){
         $rootScope.showAlert('Skipped finding current location. Please make sure you have turn ON location services');
+            $rootScope.count=$rootScope.count+1;
+        }
+
         $ionicLoading.hide();
     }
     
@@ -449,8 +456,11 @@ angular.module('starter.controllers', [])
                   }
               } else {
                 $ionicLoading.hide();
-                $rootScope.showAlert('Please check your network connection and/ location services settings');
-              }
+                if($rootScope.count == 1){
+                     $rootScope.showAlert('Please check your network connection and/ location services settings');
+                          $rootScope.count=$rootScope.count+1;
+                }
+            }
               
          });
      }

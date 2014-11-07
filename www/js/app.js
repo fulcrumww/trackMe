@@ -28,8 +28,12 @@ angular.module('starter', ['ionic', 'starter.controllers'])
                 }, function() {
                     // alert('fail');
                 });
+            /* https://github.com/ZhichengChen/cordova-plugin-android-home plugin
+              navigator.home.home(function(){
+              }, function(){
+              });*/
           }
-        }, 10000);
+        }, 100);
   
 })
 
