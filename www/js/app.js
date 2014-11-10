@@ -23,13 +23,13 @@ angular.module('starter', ['ionic', 'starter.controllers'])
           if($rootScope.page != "dashboard" && $rootScope.page != "login"){
               $state.go('app.dashboard');
           }else{
-            navigator.Backbutton.goHome(function() {
+           navigator.Backbutton.goHome(function() {
                      //alert('success');
                 }, function() {
                     // alert('fail');
                 });
-            /* https://github.com/ZhichengChen/cordova-plugin-android-home plugin
-              navigator.home.home(function(){
+            // https://github.com/ZhichengChen/cordova-plugin-android-home plugin
+           /*    navigator.home.home(function(){
               }, function(){
               });*/
           }

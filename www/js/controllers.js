@@ -235,14 +235,14 @@ angular.module('starter.controllers', [])
             }
          }
  })
-.controller('dashboardCtrl',['$config','$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer','$q' , function($config,$scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,$q,geolocation) {
+.controller('dashboardCtrl',['$config','$scope','$state','$http',  '$interval' ,'$rootScope', '$ionicLoading', '$ionicPopup','connectServer','$q','connectServerToGet' , function($config,$scope, $state, $http ,$interval, $rootScope, $ionicLoading , $ionicPopup ,connectServer,$q,connectServerToGet , geolocation) {
 
     var userId= localStorage.userId;
     var sessionId=  localStorage.sessionId;
     $rootScope.page="dashboard";
     $scope.stopTracking=function(){
 
-        if( timeInterval != null){
+        if( timeInterval != null && timeInterval != "" && timeInterval != "undefined"){
 
             var confirmPopup = $ionicPopup.confirm({title: 'CONFIRMATION',template: 'Are you sure you want to stop tracking?'});
             confirmPopup.then(function(res) {
@@ -258,7 +258,7 @@ angular.module('starter.controllers', [])
             });
 
         }else{
-            $rootScope.showAlert('Tracking is not started yet');
+            $rootScope.showAlert('Tracking not started from your device');
             timeInterval=null;
             clearInterval(stop);
             stop="undefined";
@@ -348,21 +348,44 @@ angular.module('starter.controllers', [])
         return deferred.promise;
     }
     
-                             
+        $scope.track=function(){
+             
+             timeInterval=180000;
+             try {
+             $ionicLoading.show({template: 'Loading...'});
+             if(navigator.geolocation){
+             navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000 });
+             $rootScope.timeInterval= false;
+             }
+             }catch(err) {
+             $rootScope.showAlert(err.message);
+             }
+             stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000}); $ionicLoading.hide(); $rootScope.timeInterval=true;}, timeInterval);
+        }
                        
     $scope.startTracking=function(){
-            timeInterval=180000;
-               try {
-        $ionicLoading.show({template: 'Loading...'});
-        if(navigator.geolocation){
-          navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000 });
-            $rootScope.timeInterval= false;
-        }
-        }catch(err) {
-          $rootScope.showAlert(err.message);
-        }
-        stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000}); $ionicLoading.hide(); $rootScope.timeInterval=true;}, timeInterval);
-       
+        var param = {"sessionId":sessionId,"userId":userId};
+        var url= $config.serviceUrl + "/routes/travel-history/check/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
+        
+        connectServerToGet.getResponse(url,"GET",param).success(function (data) { 
+            $ionicLoading.hide();
+            var response=data.data;
+           // alert('Success: '+JSON.stringify(response.interval));
+
+         if(parseInt(response.interval) > 420){
+            $scope.track();
+          }else{
+            $state.go('app.currentlocation', null, {  });
+          }
+                                                                    
+        }).error(function (data, status, headers, config) {
+                $ionicLoading.hide();
+                 if(data.message.toLowerCase() == "pickup has not yet started"){
+                   $scope.track();
+                 }
+            });
+             
+                             
     }
                   
          
