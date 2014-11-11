@@ -364,6 +364,7 @@ angular.module('starter.controllers', [])
         }
                        
     $scope.startTracking=function(){
+        document.getElementById("startTracking").disabled = true;
         var param = {"sessionId":sessionId,"userId":userId};
         var url= $config.serviceUrl + "/routes/travel-history/check/"+parseInt(sessionStorage.pickUpPoint)+"/"+sessionStorage.shiftTimmings;
         
@@ -375,11 +376,13 @@ angular.module('starter.controllers', [])
          if(parseInt(response.interval) > 420){
             $scope.track();
           }else{
+            document.getElementById("startTracking").disabled = false;
             $state.go('app.currentlocation', null, {  });
           }
                                                                     
         }).error(function (data, status, headers, config) {
                 $ionicLoading.hide();
+                 document.getElementById("startTracking").disabled = false;
                  if(data.message.toLowerCase() == "pickup has not yet started"){
                    $scope.track();
                  }
