@@ -377,7 +377,8 @@ angular.module('starter.controllers', [])
             $scope.track();
           }else{
             document.getElementById("startTracking").disabled = false;
-            $state.go('app.currentlocation', null, {  });
+            $rootScope.showAlert('We are apologies. You can start tracking when server do not recieve any updates since last 6 minutes ');
+            //$state.go('app.currentlocation', null, {  });
           }
                                                                     
         }).error(function (data, status, headers, config) {
