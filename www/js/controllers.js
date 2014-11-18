@@ -65,13 +65,13 @@ angular.module('starter.controllers', [])
 .controller('AppCtrl', function($scope, $ionicModal, $timeout, $state,$rootScope) {
           $scope.logOut=function(){
             clearInterval(stop);
-            stop="undefined";
             $rootScope.page="menu";
             $rootScope.timeInterval=false;
             localStorage.setItem('userId',null);
             localStorage.setItem('sessionId',null);
             sessionStorage.setItem('shiftTimmings',null);
             sessionStorage.setItem('pickUpPoint',null);
+              stop=null;
               $rootScope.count = 0;
               $state.go('app.login');
             }
@@ -250,8 +250,8 @@ angular.module('starter.controllers', [])
                     $rootScope.showAlert('Tracking stopped successfully');
                     timeInterval=null;
                     clearInterval(stop);
-                    stop="undefined";
                     $rootScope.timeInterval=false;
+                    stop=null;
                 } else {
                     console.log('cancelled');
                 }
@@ -261,8 +261,9 @@ angular.module('starter.controllers', [])
             $rootScope.showAlert('Tracking not started from your device');
             timeInterval=null;
             clearInterval(stop);
-            stop="undefined";
             $rootScope.timeInterval=false;
+            stop=null;
+
         }
 
     }
@@ -360,6 +361,7 @@ angular.module('starter.controllers', [])
              }catch(err) {
              $rootScope.showAlert(err.message);
              }
+             stop=null;
              stop= setInterval(function(){ navigator.geolocation.getCurrentPosition(geolocationSuccess,geolocationError,{ enableHighAccuracy: true ,timeout: 5000}); $ionicLoading.hide(); $rootScope.timeInterval=true;}, timeInterval);
         }
                        
@@ -371,9 +373,12 @@ angular.module('starter.controllers', [])
         connectServerToGet.getResponse(url,"GET",param).success(function (data) { 
             $ionicLoading.hide();
             var response=data.data;
-           // alert('Success: '+JSON.stringify(response.interval));
+            //alert('Success: '+JSON.stringify(response.interval));
 
          if(parseInt(response.interval) > 420){
+            timeInterval=null;
+            clearInterval(stop);
+            stop=null;
             $scope.track();
           }else{
             document.getElementById("startTracking").disabled = false;
